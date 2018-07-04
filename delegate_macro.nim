@@ -35,19 +35,22 @@ macro `()`[A](delegate: Delegate[A]; args: varargs):untyped =
   #   unpackVarargs(call, args)
 {.pop.}
 # makeDelegate proc(), Event
+
 var onEvent: Delegate[proc()]
+
 onEvent += proc()= echo "1 Hi 1 one"
 onEvent += proc()= echo "2 123122"
 
 onEvent += 
   proc()= 
-    echo("2 zxczxc")
+    echo("3 zxczxc")
 onEvent += 
   proc()= 
-    echo("3 asdasddzxczxc")
+    echo("4 asdasddzxczxc")
 onEvent += 
   proc()= 
-    echo("4 124523sdfsdzxczxc")
+    echo("5 124523sdfsdzxczxc")
+
 onEvent()
 
 
