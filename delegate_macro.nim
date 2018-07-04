@@ -3,7 +3,7 @@ import sugar
 import strutils
 
 type
-  Delegate[Proc] = seq[Proc]
+  Delegate[Proc: proc] = seq[Proc]
 
 {.push.}
 {.experimental.}
