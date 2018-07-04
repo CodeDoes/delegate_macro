@@ -14,7 +14,7 @@ type
 proc `+=`[T](x: var Delegate[T]; y: T)=
   x.add( y)
 proc `-=`[T](x: var Delegate[T]; y: T)=
-  x.del( x.find y)
+  x.del( x.find y )
 # macro add[T](x: var Delegate[T]; y: varargs[T]):untyped=
 #   result = newStmtList()
 #   for i in y:
@@ -27,9 +27,13 @@ macro `()`[A](delegate: Delegate[A]; args: varargs[typed]):untyped =
   var call = newCall(call_ident)
   for a in args:
     call.add a
+  var proc_caller_ident = genSym(nskProc,"procCaller")
   result = quote do:
-    for `call_ident` in `delegate`:
+    proc `proc_caller_ident`(
+          `call_ident`:proc) {.inline.} =
       `call`
+    for item in `delegate`:
+      `proc_caller_ident`(item)
   hint repr result
   # var call = newCall(delegate.)
   # for call in delegate:
@@ -38,12 +42,22 @@ macro `()`[A](delegate: Delegate[A]; args: varargs[typed]):untyped =
 # makeDelegate proc(), Event
 
 var onEvent: Delegate[proc(k: string)]
-
-onEvent += proc(k: string)= echo("1 Hi 1 on  " & k)
-onEvent += proc(k: string)= echo("2 12312  " & k)
-onEvent += proc(k: string)= echo("3 zxczxc " & k)
-onEvent += proc(k: string)= echo("4 asdasddzxczxc " & k)
-onEvent += proc(k: string)= echo("5 124523sdfsdzxczxc " & k)
+import strformat
+onEvent += proc(k: string)= (
+  echo fmt"1 Hi 1 on {k}";
+)
+onEvent += proc(k: string)= (
+  echo fmt"2 12312 {k}";
+)
+onEvent += proc(k: string)= (
+  echo fmt"3 zxczxc {k}";
+)
+onEvent += proc(k: string)= (
+  echo fmt"4 asdasddzxczxc {k}";
+)
+onEvent += proc(k: string)= (
+  echo fmt"5 124523sdfsdzxczxc {k}";
+)
 
 onEvent("fasasdasd")
 
